@@ -27,7 +27,7 @@ export function Hero() {
   const dark = mounted && resolvedTheme === "dark";
 
   return <section id="main" className="hero rounded-panel landscape-hero" aria-labelledby="hero-title">
-    <h1 id="hero-title" className="sr-only">{portfolio.name} — {portfolio.title}. Ideas into experiences.</h1>
+    <h1 id="hero-title" className="hero-name" aria-label={`${portfolio.name} — ${portfolio.title}`}>{portfolio.name}</h1>
     <div className="scene-topline">
       <span className="intro-pill"><span className="mini-star">✳</span> A little code. A lot of curiosity.</span>
       <button className="scene-weather" onClick={() => setTheme(dark ? "light" : "dark")} aria-label={dark ? "Switch scene to day" : "Switch scene to night"}>
@@ -35,8 +35,8 @@ export function Hero() {
       </button>
     </div>
     <div className="hero-scenery" id="playground">
-      <AvatarScene key={reset} motion={motion} showAvatar={view === "model"} />
-      {view === "portrait" && <div className="portrait-layer" ref={stage}><Image className="scene-portrait" src="/character.png" width={1024} height={1536} alt="Sekhar’s smiling character, with curly black hair and a light blue shirt" sizes="(max-width: 800px) 65vw, 35vw" draggable={false} priority /></div>}
+      <AvatarScene reset={reset} motion={motion} showAvatar={view === "model"} />
+      {view === "portrait" && <div className="portrait-layer" ref={stage}><Image className="scene-portrait" src="/character.png" width={1024} height={1536} alt={`${portfolio.name}’s smiling character, with curly black hair`} sizes="(max-width: 600px) 75vw, 32vw" draggable={false} loading="eager" /></div>}
     </div>
     <div className="scene-caption">
       <div className="hero-copy">
@@ -46,7 +46,7 @@ export function Hero() {
         <a className="primary-button" href="#work">Explore my work <ArrowUpRight size={17} /></a>
       </div>
       <div className="scene-controls">
-        <span className="interaction-note"><MousePointer2 size={13} /> {motion ? (view === "model" ? "Move to explore · drag to turn" : "Move to explore the landscape") : "A moment of stillness"}</span>
+        <span className="interaction-note"><MousePointer2 size={13} /> {motion ? (view === "model" ? "Drag or swipe to turn" : "Move to explore the landscape") : "A moment of stillness"}</span>
         <div className="character-controls">
           <div className="view-tabs" role="group" aria-label="Character view">
             <button aria-pressed={view === "portrait"} onClick={() => setView("portrait")}>Portrait</button>
@@ -55,7 +55,7 @@ export function Hero() {
           <button className="reset-button" aria-label="Reset scene position" onClick={() => setReset(value => value + 1)}><RotateCcw size={15} /></button>
           <button className="reset-button" aria-label={motion ? "Pause motion" : "Enable motion"} aria-pressed={!motion} onClick={() => setMotionOverride(!motion)}>{motion ? <Pause size={15} /> : <Play size={15} />}</button>
         </div>
-        <span className="scene-footnote">Built with curiosity. Best explored slowly.</span>
+        <span className="scene-footnote">A little curiosity goes a long way.</span>
       </div>
     </div>
   </section>;

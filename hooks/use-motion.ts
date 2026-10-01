@@ -5,6 +5,9 @@ const subscribeReduced = (callback:()=>void) => { const m=window.matchMedia(redu
 export function useReducedMotion() { return useSyncExternalStore(subscribeReduced,()=>window.matchMedia(reducedQuery).matches,()=>true); }
 const subscribeVisibility = (callback:()=>void) => {document.addEventListener("visibilitychange",callback);return()=>document.removeEventListener("visibilitychange",callback);};
 export function usePageVisible() { return useSyncExternalStore(subscribeVisibility,()=>!document.hidden,()=>true); }
+const compactQuery = "(max-width: 800px)";
+const subscribeCompact = (callback:()=>void) => { const m=window.matchMedia(compactQuery);m.addEventListener("change",callback);return()=>m.removeEventListener("change",callback); };
+export function useCompactViewport() { return useSyncExternalStore(subscribeCompact,()=>window.matchMedia(compactQuery).matches,()=>true); }
 export function usePointerParallax(ref:RefObject<HTMLDivElement|null>,enabled:boolean,reset:number) {
  useEffect(()=>{
   const node=ref.current;if(!node||!enabled)return;

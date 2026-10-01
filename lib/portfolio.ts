@@ -1,9 +1,9 @@
 /** Edit this file to personalize your portfolio. Never put API secrets here. */
 export const portfolio = {
-  name: "Sekhar",
+  name: "Biswas",
   title: "Creative developer",
   description: "Thoughtful design, creative development, and a playful interactive 3D character.",
-  avatarUrl: "/models/sekhar-v2.glb?v=3",
+  avatarUrl: "/models/biswas-head-v3.glb",
   email: "",
   github: "",
   linkedin: "",

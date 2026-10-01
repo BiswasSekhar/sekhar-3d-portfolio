@@ -2,11 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Center, Text3D } from "@react-three/drei";
-import { BufferGeometry, CatmullRomCurve3, Float32BufferAttribute, Group, MathUtils, Vector3 } from "three";
-import { portfolio } from "@/lib/portfolio";
+import { BufferGeometry, CatmullRomCurve3, Color, Float32BufferAttribute, Group, MathUtils, Vector3 } from "three";
 
-type LandscapeProps = { dark: boolean; motion: boolean; onToggleTheme: () => void };
+type LandscapeProps = { dark: boolean; motion: boolean; compact: boolean; onToggleTheme: () => void };
 
 function Tree({ position, scale = 1, dark, motion, variant = 0 }: {
   position: [number, number, number]; scale?: number; dark: boolean; motion: boolean; variant?: number;
@@ -29,7 +27,7 @@ function Tree({ position, scale = 1, dark, motion, variant = 0 }: {
     <group ref={canopy} position={[0, .55, 0]} onPointerOver={event => { event.stopPropagation(); setHovered(true); invalidate(); }} onPointerOut={() => { setHovered(false); invalidate(); }}>
       {[[0, .42, 0, .43, .62], [-.24, .23, .03, .32, .43], [.25, .31, -.03, .33, .48]].map(([x, y, z, w, h], i) =>
         <mesh key={i} position={[x, y, z]} scale={[w, h, w]}>
-          <sphereGeometry args={[1, 24, 18]} />
+          <sphereGeometry args={[1, 16, 12]} />
           <meshStandardMaterial color={leaf} roughness={.85} emissive={dark ? "#144654" : "#4a855c"} emissiveIntensity={hovered && motion ? .25 : .04} />
         </mesh>
       )}
@@ -92,9 +90,9 @@ function Cloud({ position, scale = 1, dark }: { position: [number, number, numbe
   </group>;
 }
 
-export function Landscape({ dark, motion, onToggleTheme }: LandscapeProps) {
+export function Landscape({ dark, motion, compact, onToggleTheme }: LandscapeProps) {
   const width = useThree(state => state.viewport.width);
-  const spread = Math.max(2.4, width * .48);
+  const spread = Math.max(2.0, width * .48);
   const sky = useRef<Group>(null);
   const invalidate = useThree(state => state.invalidate);
   const [celestialHovered, setCelestialHovered] = useState(false);
@@ -117,9 +115,7 @@ export function Landscape({ dark, motion, onToggleTheme }: LandscapeProps) {
       )}
       <mesh><sphereGeometry args={[.40, 24, 16]} /><meshBasicMaterial color={dark ? "#b5d1ff" : "#fff3b5"} transparent opacity={.12} depthWrite={false} /></mesh>
     </group>
-    {dark && stars.map((star, i) => <mesh key={i} position={[star.x * spread * 1.35, star.y, -6.5]}>
-      <sphereGeometry args={[star.scale, 6, 4]} /><meshBasicMaterial color={i % 3 === 0 ? "#a5cbff" : "#e8f2ff"} />
-    </mesh>)}
+    {dark && <NightStars stars={stars} spread={spread} />}
     <Cloud position={[-spread * .76, 2.95, -5]} scale={1.5} dark={dark} />
     <Cloud position={[spread * .44, 2.08, -5.5]} scale={.95} dark={dark} />
     <Cloud position={[-spread * .25, 3.7, -6]} scale={.75} dark={dark} />
@@ -128,28 +124,32 @@ export function Landscape({ dark, motion, onToggleTheme }: LandscapeProps) {
       [spread * .82, -.89, -5.2, spread * .78, 1.68, 2.8],
       [-spread * .30, -1.25, -3.8, spread * .82, 1.26, 2.4],
     ].map(([x, y, z, sx, sy, sz], i) => <mesh key={i} position={[x, y, z]} scale={[sx, sy, sz]}>
-      <sphereGeometry args={[1, 40, 24]} /><meshStandardMaterial color={dark ? ["#214966", "#25556a", "#276568"][i] : ["#82b9a7", "#70b59d", "#58a68d"][i]} roughness={1} />
+      <sphereGeometry args={[1, 24, 16]} /><meshStandardMaterial color={dark ? ["#214966", "#25556a", "#276568"][i] : ["#82b9a7", "#70b59d", "#58a68d"][i]} roughness={1} />
     </mesh>)}
     <mesh position={[0, -1.31, -1.5]} scale={[spread * 2.6, 1.02, 7]}>
-      <sphereGeometry args={[1, 48, 24]} /><meshStandardMaterial color={dark ? "#214e5e" : "#71b995"} roughness={1} />
+      <sphereGeometry args={[1, 32, 16]} /><meshStandardMaterial color={dark ? "#214e5e" : "#71b995"} roughness={1} />
     </mesh>
     <Road dark={dark} />
     {[
       [-.90, -.34, -1.3, 1.18], [-.75, -.22, -2.5, .90], [-.99, -.25, -3.8, .76],
       [.82, -.35, -.9, 1.35], [.99, -.32, -2.3, .98], [.69, -.16, -3.7, .75],
       [-.43, .0, -5.8, .63], [.32, .07, -6.2, .53],
-    ].map(([x, y, z, scale], i) => <Tree key={i} position={[x * spread, y, z]} scale={scale} dark={dark} motion={motion} variant={i} />)}
-    <SuspendedName dark={dark} width={width} />
+    ].filter((_, i) => !compact || i !== 2 && i !== 4).map(([x, y, z, scale], i) => <Tree key={i} position={[x * spread, y, z]} scale={scale} dark={dark} motion={motion} variant={i} />)}
   </group>;
 }
 
-function SuspendedName({ dark, width }: { dark: boolean; width: number }) {
-  // The title lives behind the head in world space, so the mesh handles occlusion.
-  return <Center position={[0, 2.20, -1.65]} scale={Math.min(width / 6.5, 1.5)}>
-    <Text3D font="/fonts/helvetiker_bold.typeface.json" size={.89} height={.17} curveSegments={8} bevelEnabled bevelSize={.014} bevelThickness={.012} bevelSegments={3}>
-      {portfolio.name.toUpperCase()}
-      <meshStandardMaterial attach="material-0" color={dark ? "#c0d9ff" : "#f4faff"} roughness={.45} />
-      <meshStandardMaterial attach="material-1" color={dark ? "#456b96" : "#83acc8"} roughness={.55} />
-    </Text3D>
-  </Center>;
+function NightStars({ stars, spread }: { stars: { x: number; y: number }[]; spread: number }) {
+  const geometry = useMemo(() => {
+    const positions: number[] = [], colors: number[] = [];
+    stars.forEach((star, i) => {
+      positions.push(star.x * spread * 1.35, star.y, -6.5);
+      new Color(i % 3 === 0 ? "#a5cbff" : "#e8f2ff").toArray(colors, i * 3);
+    });
+    const result = new BufferGeometry();
+    result.setAttribute("position", new Float32BufferAttribute(positions, 3));
+    result.setAttribute("color", new Float32BufferAttribute(colors, 3));
+    return result;
+  }, [stars, spread]);
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  return <points geometry={geometry}><pointsMaterial vertexColors size={.045} sizeAttenuation toneMapped={false} /></points>;
 }

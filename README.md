@@ -1,6 +1,6 @@
-# Sekhar — an interactive 3D portfolio
+# Biswas — an interactive 3D portfolio
 
-A standard Next.js App Router application, ready for GitHub and Vercel. The hero is a miniature blue-and-green landscape with an interactive character, rounded trees, rolling hills, a winding road, and an extruded title behind the character's head. Dark mode changes the world to night with a moon, stars, blue foliage, and glowing roadside lamps.
+A standard Next.js App Router application, ready for GitHub and Vercel. The hero pairs an interactive 3D head with large, flat HTML text behind it. Rounded trees, rolling hills, and a winding road create a miniature blue-and-green landscape. Dark mode changes the world to night with a moon, stars, blue foliage, and glowing roadside lamps.
 
 Private source repository: [BiswasSekhar/sekhar-3d-portfolio](https://github.com/BiswasSekhar/sekhar-3d-portfolio).
 
@@ -39,7 +39,7 @@ npm run model:build # Regenerate the local GLB
 | `components/portfolio/hero.tsx` | Introduction and scene controls |
 | `components/portfolio/about-section.tsx` | Biography and toolkit |
 | `app/globals.css` | Colors, typography, spacing, and corner radii |
-| `components/three/landscape.tsx` | Trees, hills, road, sky, and 3D title |
+| `components/three/landscape.tsx` | Trees, hills, road, and sky |
 | `components/three/avatar-scene.tsx` | Camera, lighting, cursor response, and character rotation |
 | `scripts/generate-avatar.mjs` | Local character geometry and materials |
 
@@ -55,15 +55,19 @@ Orbit and Forma are explicitly labeled concept projects. The biography and toolk
 - Choose Portrait to use the reference-matched transparent illustration.
 - Reset restores the scene. Pause motion disables cursor tracking, dragging, and tree animation.
 
-The canvas renders on demand, caps its pixel ratio, and suspends drawing while off-screen or when the page is hidden. It honors `prefers-reduced-motion`. A semantic heading and ordinary links remain available outside WebGL. WebGL failure leaves the Portrait control available.
+The canvas renders on demand and suspends drawing while off-screen or when the page is hidden. It honors `prefers-reduced-motion`. Phones get a closer camera framing, fewer trees, and a pixel ratio capped at 1.1; desktop caps it at 1.4. Controls remain at least 40 pixels tall on phones. Reset updates the existing scene instead of recreating the WebGL context.
+
+The title uses ordinary HTML, so it remains sharp at every rendering resolution and needs no 3D font or text geometry. The landscape can appear while the head loads. WebGL failure leaves the Portrait control available.
 
 ## Character assets
 
-`public/models/sekhar-v2.glb` is a real local procedural mesh with swept curls and strand ridges, shaped cheeks, an open smile, a blue button-down shirt, white trousers, and an olive watch. Its head can turn independently in the app. It is a stylized approximation of the reference, not an exact reconstructed or fully rigged mesh. Replacing it with a sculpted GLB later only requires updating `avatarUrl` and checking its framing.
+`public/models/biswas-head-v3.glb` is a real local procedural head mesh with swept curls, strand ridges, shaped cheeks, and an open smile. It includes no body, neck, or clothing. It is a stylized approximation of the reference, not an exact reconstructed or fully rigged mesh. Replacing it with a sculpted GLB later only requires updating `avatarUrl` and checking its framing.
 
-`public/character.png` is a transparent raster portrait generated with the built-in imagegen tool from the supplied turnaround. Its brief was: match the tan skin, glossy dark eyes, black curls, toothy smile, light blue rolled-sleeve shirt, white pants, and olive watch; front-facing upper-thigh framing, neutral studio light, transparent background, no text or grid. This portrait view responds with perspective movement; the 3D model view uses the GLB.
+The head asset is about 1.4 MB, compared with 3.7 MB for the previous full character: 62% smaller, with about 64% fewer triangles. Static surfaces are merged by material to reduce draw calls. The star field uses one points object. These are measured asset and geometry reductions; mobile frame rate and Core Web Vitals have not been measured on a physical phone.
 
-The landscape and title are actual geometry created in code. All scene assets are local. The bundled Helvetiker font's license is preserved in `public/fonts/LICENSE`.
+`public/character.png` is a transparent raster portrait generated with the built-in imagegen tool from the supplied turnaround. The original image includes the blue shirt and white pants; CSS crops the portrait to the face in this layout. This view responds with perspective movement; the 3D model view uses the GLB. The raster is requested only when Portrait is selected.
+
+The landscape is actual geometry created in code. All active scene assets are local. Previous full-body GLBs and the unused Helvetiker font remain as source backups; the app does not load them.
 
 ## Upload to GitHub
 
@@ -74,7 +78,7 @@ git init
 git add .
 git commit -m "Build interactive 3D portfolio"
 git branch -M main
-gh repo create sekhar-3d-portfolio --private --source=. --remote=origin --push
+gh repo create biswas-3d-portfolio --private --source=. --remote=origin --push
 ```
 
 This workspace uses the `github` remote for the new repository, with the app at its root. The older hosting remote remains as `origin`. To upload subsequent edits from this branch:
