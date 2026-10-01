@@ -128,11 +128,11 @@ export default function AvatarScene({ motion, showAvatar }: SceneProps) {
     onPointerDown={event => {
       if (motion && showAvatar && event.button === 0 && event.target instanceof HTMLCanvasElement) {
         drag.current = { x: event.clientX, yaw };
-        event.currentTarget.setPointerCapture(event.pointerId);
       }
     }}
     onPointerMove={event => { if (motion && drag.current) setYaw(drag.current.yaw + (event.clientX - drag.current.x) * .008); }}
     onPointerUp={() => { drag.current = null; }}
+    onPointerLeave={() => { drag.current = null; }}
     onPointerCancel={() => { drag.current = null; }}>
     <SceneBoundary><Canvas className="model-canvas" frameloop={visible ? "demand" : "never"} dpr={[1, 1.6]}
       camera={{ position: [0, 1.60, 7.9], fov: 30, near: .1, far: 40 }}
