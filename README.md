@@ -1,30 +1,102 @@
-# Sekhar — creative developer portfolio
+# Sekhar — an interactive 3D portfolio
 
-A portfolio with large rounded panels, pill controls, responsive project cards, and persistent light/dark themes.
+A standard Next.js App Router application, ready for GitHub and Vercel. The hero is a miniature blue-and-green landscape with an interactive character, rounded trees, rolling hills, a winding road, and an extruded title behind the character's head. Dark mode changes the world to night with a moon, stars, blue foliage, and glowing roadside lamps.
 
-## Run
+Private source repository: [BiswasSekhar/sekhar-3d-portfolio](https://github.com/BiswasSekhar/sekhar-3d-portfolio).
+
+## Stack
+
+- Next.js 16, React 19, strict TypeScript
+- Three.js, React Three Fiber, and Drei for actual 3D geometry
+- Tailwind CSS 4 and custom design tokens for generous rounded panels and pill controls
+- next-themes for a saved light/dark preference
+- Server-rendered portfolio content and statically generated project pages
+
+No API keys, database, or paid 3D service is needed.
+
+## Run locally
+
+Use Node.js 22.13 or later; `.nvmrc` selects Node 22.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-The development server prints its local URL. To build: `npm run build`.
+Open the URL printed by Next.js, normally http://localhost:3000.
+
+```sh
+npm run check      # TypeScript, ESLint, production build
+npm run start      # Serve the completed production build
+npm run model:build # Regenerate the local GLB
+```
+
+## Make it yours
+
+| File | What to change |
+| --- | --- |
+| `lib/portfolio.ts` | Name, title, projects, contact links, and model URL |
+| `components/portfolio/hero.tsx` | Introduction and scene controls |
+| `components/portfolio/about-section.tsx` | Biography and toolkit |
+| `app/globals.css` | Colors, typography, spacing, and corner radii |
+| `components/three/landscape.tsx` | Trees, hills, road, sky, and 3D title |
+| `components/three/avatar-scene.tsx` | Camera, lighting, cursor response, and character rotation |
+| `scripts/generate-avatar.mjs` | Local character geometry and materials |
+
+Orbit and Forma are explicitly labeled concept projects. The biography and toolkit are starter copy. Replace them with your own work and details. Blank contact fields stay hidden until you fill them in.
+
+## Interactions
+
+- Move the mouse for gentle scene parallax and head tracking.
+- Drag horizontally to turn the actual 3D character. Touch scrolling remains available.
+- Focus the scene and use Left/Right arrows to rotate; Home resets the character.
+- Hover trees for a gentle canopy response.
+- Click the sun/moon or the accessible scene button to switch day/night. The header theme switch does the same.
+- Choose Portrait to use the reference-matched transparent illustration.
+- Reset restores the scene. Pause motion disables cursor tracking, dragging, and tree animation.
+
+The canvas renders on demand, caps its pixel ratio, and suspends drawing while off-screen or when the page is hidden. It honors `prefers-reduced-motion`. A semantic heading and ordinary links remain available outside WebGL. WebGL failure leaves the Portrait control available.
 
 ## Character assets
 
-- `public/character.png`: a transparent portrait generated with the built-in imagegen tool from the supplied turnaround. It matches the curls, tan skin, blue shirt, white pants, smile, and olive watch. The portrait uses smooth cursor-responsive perspective movement; this view is a raster image, not a 3D mesh.
-- `public/sekhar-avatar.glb`: a real, unrigged procedural 3D approximation. The 3D model tab loads it with Three.js. It responds to cursor movement and supports dragging to rotate. Materials and lighting work in both themes. It is an approximation, not an exact reconstruction of the source image.
-- `scripts/generate-avatar.mjs`: editable mesh-generation source. Run `node scripts/generate-avatar.mjs` to regenerate the GLB.
+`public/models/sekhar-v2.glb` is a real local procedural mesh with swept curls and strand ridges, shaped cheeks, an open smile, a blue button-down shirt, white trousers, and an olive watch. Its head can turn independently in the app. It is a stylized approximation of the reference, not an exact reconstructed or fully rigged mesh. Replacing it with a sculpted GLB later only requires updating `avatarUrl` and checking its framing.
 
-Portrait generation brief: "Match the supplied stylized 3D character: warm tan skin, large glossy black eyes, thick black curls, happy toothy smile, light blue rolled-sleeve button-down, chest pocket, white pants and olive watch. Front-facing, hands in pockets, upper-thigh framing, neutral studio light, genuinely transparent background, no text or grid."
+`public/character.png` is a transparent raster portrait generated with the built-in imagegen tool from the supplied turnaround. Its brief was: match the tan skin, glossy dark eyes, black curls, toothy smile, light blue rolled-sleeve shirt, white pants, and olive watch; front-facing upper-thigh framing, neutral studio light, transparent background, no text or grid. This portrait view responds with perspective movement; the 3D model view uses the GLB.
 
-## Customize
+The landscape and title are actual geometry created in code. All scene assets are local. The bundled Helvetiker font's license is preserved in `public/fonts/LICENSE`.
 
-Change the name, introduction, project content, and about copy in `app/page.tsx`. Orbit and Forma are illustrative concept projects, not verified real work. The toolkit and biography are editable starter copy. Replace them with your own information before sharing professionally.
+## Upload to GitHub
 
-Theme and radius tokens are in `app/globals.css`. Outer panels use a 56px radius, cards use 30–36px, and controls use pill radii.
+From this directory, if using a new checkout:
 
-The 3D canvas is lazy-loaded, caps device pixel ratio, pauses drawing when off-screen or when the document is hidden, and disposes its renderer and geometry when closed. Motion honors the device's reduced-motion preference and can be paused with the visible control. Theme is saved locally on the visitor's device.
+```sh
+git init
+git add .
+git commit -m "Build interactive 3D portfolio"
+git branch -M main
+gh repo create sekhar-3d-portfolio --private --source=. --remote=origin --push
+```
 
-A private Sites publication is configured in `.openai/hosting.json`.
+This workspace uses the `github` remote for the new repository, with the app at its root. The older hosting remote remains as `origin`. To upload subsequent edits from this branch:
+
+```sh
+git add .
+git commit -m "Update portfolio"
+git push github HEAD:main
+```
+
+`.gitignore` excludes environment files, build output, local tooling, and Vercel credentials. GitHub Actions runs `npm run check` for pushes and pull requests.
+
+## Deploy to Vercel
+
+**Git integration:** Import the GitHub repository at [Vercel New Project](https://vercel.com/new). Use the Next.js framework preset and Node 22. If the repository contains the app in a subfolder, select `portfolio` as the Root Directory; if the app files are at the repository root, leave it at `.`. Install and build commands are already in `vercel.json`. No environment variables are required.
+
+**CLI:** From the app directory:
+
+```sh
+npx vercel login
+npx vercel              # Preview deployment
+npx vercel --prod       # Production deployment
+```
+
+The local Vercel CLI must be logged in before deployment. A successful local build does not itself publish the app. For the platform's current commands, see the official [Next.js deployment guide](https://vercel.com/docs/frameworks/full-stack/nextjs) and [deploy command reference](https://vercel.com/docs/cli/deploy).

@@ -1,0 +1,8 @@
+.git
+.next
+node_modules
+.sites-runtime
+.wrangler
+dist
+preview-*.jpg
+*.tsbuildinfo
