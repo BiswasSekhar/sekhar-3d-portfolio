@@ -8,5 +8,5 @@ export const metadata:Metadata={
  icons:{icon:"/favicon.svg",shortcut:"/favicon.svg"},
 };
 export default function RootLayout({children}:Readonly<{children:React.ReactNode}>) {
- return <html lang="en" suppressHydrationWarning><body><Providers>{children}</Providers></body></html>;
+ return <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning><body><Providers>{children}</Providers></body></html>;
 }

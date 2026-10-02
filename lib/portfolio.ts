@@ -1,29 +1,98 @@
-/** Edit this file to personalize your portfolio. Never put API secrets here. */
+/** Public content sourced from the supplied resume. */
 export const portfolio = {
-  name: "Biswas",
-  title: "Creative developer",
-  description: "Thoughtful design, creative development, and a playful interactive 3D character.",
+  name: "Biswas Sekhar", shortName: "Biswas", title: "Full-stack software developer",
+  description: "I'm Biswas Sekhar, a full-stack developer in Kochi, Kerala building educational software, mobile apps, and AI-assisted experiences.",
+  location: "Kochi, Kerala, India", email: "biswas.siv@gmail.com",
+  github: "https://github.com/BiswasSekhar", linkedin: "https://linkedin.com/in/biswas-sekhar",
+  resumeUrl: "/biswas-sekhar-resume.pdf",
+  // Only the archived scene source references this; no active page loads it.
   avatarUrl: "/models/biswas-head-v3.glb",
-  email: "",
-  github: "",
-  linkedin: "",
 } as const;
 
 export const projects = [
   {
-    slug: "orbit", title: "Orbit", category: "Product design · Development", type: "A quieter space for your day.", className: "orbit",
-    description: "A concept workspace that puts daily priorities first. A focused dashboard, clear task hierarchy, and a little room to breathe.",
-    details: ["A personal overview with everything in one place", "A simple, accessible task flow", "Responsive layouts for work on the go"],
-    problem: "Busy dashboards often turn a small daily plan into a wall of competing information. This concept makes the next useful action easy to find.",
-    approach: "Start with the person’s daily focus. Keep navigation quiet, group related tasks, and use a simple visual hierarchy to show what matters now.",
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
+    slug: "panam", title: "Panam", category: "Mobile · Personal finance", type: "Smart expense manager", className: "panam", featured: true, liveUrl: "https://panam.work",
+    description: "An expense manager that turns bank statements into a clearer picture of everyday spending.",
+    details: ["Import bank statements with AI-assisted parsing", "Keep expenses in sync across devices", "A cross-platform experience built with Expo and React Native"],
+    problem: "Turn bank-statement data into useful, accessible expense records across devices.",
+    approach: "Built a cross-platform app with Firebase synchronization, Cloudflare services, and Gemini and Groq for AI-assisted statement parsing.",
+    technologies: ["React Native", "Expo", "Firebase", "Cloudflare", "Gemini", "Groq"],
   },
   {
-    slug: "forma", title: "Forma", category: "Creative development · Web design", type: "A new perspective on the everyday.", className: "forma",
-    description: "A concept digital gallery exploring how type, color, and interaction can make a small collection feel special.",
-    details: ["An editorial collection with expressive typography", "Soft motion that responds to interaction", "A flexible design system across screen sizes"],
-    problem: "A small creative collection needs a clear point of view without burying the work in interface decoration.",
-    approach: "Give typography and composition room to lead. Carry a small set of colors and shapes through every screen, then use interaction only where it helps exploration.",
-    technologies: ["React", "CSS", "Responsive design"],
+    slug: "rekha", title: "Rekha", category: "Android · Document tools", type: "AI PDF utility", className: "rekha", featured: true, liveUrl: "",
+    description: "An ad-free Android app that makes PDFs easier to read, convert, and understand.",
+    details: ["Compress, convert, and read PDF documents", "Extract text with OCR and translate with AI", "Chat with documents and generate summaries"],
+    problem: "Bring everyday document tools and AI-assisted reading into one ad-free Android application.",
+    approach: "Built the application in Flutter, combining PDF utilities with OCR, translation, document chat, and summarization.",
+    technologies: ["Flutter", "Android", "OCR", "AI translation"],
   },
+  {
+    slug: "streamsync", title: "StreamSync", category: "Desktop & web · Real-time media", type: "Peer-to-peer watch party", className: "streamsync", featured: true, liveUrl: "",
+    description: "A shared movie night with synchronized playback, video calls, and real-time chat.",
+    details: ["Anonymous peer-to-peer watch parties", "Fast fragmented-MP4 streaming and synchronized playback", "Video calls and chat across web and mobile receivers"],
+    problem: "Keep playback and conversation together across devices in an anonymous watch party.",
+    approach: "Created a serverless watch-party system with Tauri and Rust, FFmpeg media processing, WebRTC connections, and web and mobile receivers.",
+    technologies: ["Tauri", "Rust", "React", "FFmpeg", "WebRTC", "Axum"],
+  },
+  {
+    slug: "cairn", title: "Cairn", category: "Web · AI & productivity", type: "AI work management", className: "cairn", featured: true, liveUrl: "",
+    description: "A multi-tenant workspace that connects planning, progress, and thoughtful weekly reviews.",
+    details: ["AI-assisted planning and progress tracking", "Vector search and capability discovery", "Slack and Google Calendar integrations with detailed weekly reviews"],
+    problem: "Connect a team's plans, capabilities, progress, and reviews in a shared workspace.",
+    approach: "Built a multi-tenant work management platform using AI agents, vector search, and integrations with Slack and Google Calendar.",
+    technologies: ["AI agents", "Vector search", "Slack", "Google Calendar"],
+  },
+  {
+    slug: "stackswipe", title: "StackSwipe", category: "Web · Developer community", type: "AI developer social platform", className: "stackswipe", featured: false, liveUrl: "",
+    description: "A subject-based developer community with persona-led AI posts, stories, comments, and messaging.",
+    details: ["Persona-led posts and stories generated by AI agents", "Subject-based discovery of engineering topics and tools", "Comments and direct messaging"],
+    problem: "Build a subject-based social experience around developer interests and AI-generated content.",
+    approach: "Combined Next.js and React with Prisma, PostgreSQL, and Groq to support AI personas, conversations, and topic discovery.",
+    technologies: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Groq"],
+  },
+  {
+    slug: "streamdeck", title: "StreamDeck", category: "Android TV · Discovery", type: "Streaming discovery app", className: "streamdeck", featured: false, liveUrl: "",
+    description: "An Android TV app that brings releases from multiple streaming platforms into one discovery experience.",
+    details: ["Discover releases across multiple OTT platforms", "Open the selected title in its streaming service", "Python-based data collection and Docker services"],
+    problem: "Bring scattered streaming releases into one TV-friendly discovery workflow.",
+    approach: "Built an Android TV application in Kotlin, with Python web scraping, Docker, and Cloudflare, and deep links to streaming services.",
+    technologies: ["Kotlin", "Python", "Docker", "Cloudflare"],
+  },
+  {
+    slug: "ccragbot", title: "CCRAGBot", category: "AI · Education", type: "Knowledge assistant", className: "ccragbot", featured: false, liveUrl: "",
+    description: "A coaching center's knowledge assistant, answering questions from its own source material.",
+    details: ["Answers grounded in the coaching center's knowledge base", "Vectorized source content and retrieval", "A Python-based RAG workflow"],
+    problem: "Answer student questions using a coaching center's own knowledge rather than generic responses.",
+    approach: "Built a retrieval-augmented generation chatbot with Python, vector search, and a source-specific knowledge base.",
+    technologies: ["Python", "RAG", "Vector search", "AI"],
+  },
+  {
+    slug: "yeah", title: "Yeah", category: "Web · Machine learning", type: "Malayalam fact-checking", className: "yeah", featured: false, liveUrl: "",
+    description: "A Malayalam-first platform that helps people assess the credibility of news content.",
+    details: ["An accessible Malayalam-first fact-checking workflow", "Data preprocessing, model training, and evaluation", "Machine-learning capabilities integrated into a web application"],
+    problem: "Make news-credibility assessment accessible through a Malayalam-first web experience.",
+    approach: "Implemented fake-news detection with Python and PyTorch and connected the model to a React, FastAPI, and Supabase application.",
+    technologies: ["React", "FastAPI", "Supabase", "Python", "PyTorch"],
+  },
+] as const;
+
+export const experience = [
+  {
+    company: "Comini Learning", role: "Full-stack developer", dates: "2025 – Present",
+    description: "Building educational software and AI-assisted learning experiences with Vue.js and Frappe.",
+    highlights: ["Multi-agent pipelines for student reports and activities, with text, images, and audio.", "Media galleries, annotation tools, attendance, checklists, and an in-product AI assistant.", "Core learning workflows and improvements to site latency."],
+    technologies: ["Vue.js", "Frappe", "Python", "AI agents"],
+  },
+  {
+    company: "Talent Deals", role: "Software engineer", dates: "2024 – 2025",
+    description: "Redesigned the company website around clear journeys, responsive layouts, and a cohesive visual system.",
+    highlights: ["Structured company data for reliable content management and scalable application development."],
+    technologies: ["Web development", "UI design", "Data modeling"],
+  },
+] as const;
+
+export const skillGroups = [
+  { title: "Interfaces", description: "Thoughtful screens, on any device.", skills: ["Vue.js", "React", "Next.js", "React Native", "Flutter", "Kotlin"] },
+  { title: "Systems", description: "The foundations behind the experience.", skills: ["Python", "Frappe", "Node.js", "FastAPI", "Rust", "PostgreSQL"] },
+  { title: "AI & delivery", description: "From a useful idea to a shipped product.", skills: ["AI agents", "RAG", "PyTorch", "Cloudflare", "Docker", "Figma"] },
 ] as const;

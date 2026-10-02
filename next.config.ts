@@ -1,11 +1,14 @@
 import type { NextConfig } from "next";
 import { fileURLToPath } from "node:url";
-const nextConfig:NextConfig={
+
+const staticExport = process.env.SITES_STATIC_EXPORT === "1";
+
+const nextConfig: NextConfig = {
  poweredByHeader:false,
  turbopack:{root:fileURLToPath(new URL(".",import.meta.url))},
  reactStrictMode:true,
- async headers() {
-  return [{source:"/models/:path*",headers:[{key:"Cache-Control",value:"public, max-age=86400, stale-while-revalidate=604800"}]}];
- },
+ output: staticExport ? "export" : undefined,
+ trailingSlash: staticExport,
+ images: { unoptimized: staticExport },
 };
 export default nextConfig;

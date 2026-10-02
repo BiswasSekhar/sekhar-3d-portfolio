@@ -1,19 +1,42 @@
 import Link from "next/link";
-import { Asterisk, ExternalLink } from "lucide-react";
-import { projects, portfolio } from "@/lib/portfolio";
+import { ArrowUpRight, Check, FileText, Layers, Play, ScanText, Sparkles, Wallet } from "lucide-react";
+import { projects } from "@/lib/portfolio";
+import { Character } from "./character";
+import { DepthScene } from "./depth-scene";
 
-export function ProjectGrid() { return (
-      <section className="work-section" id="work">
-        <div className="section-heading"><div><span className="section-kicker">A few things I’ve imagined</span><h2>Selected explorations<span>.</span></h2></div><span className="section-aside">Design meets development.</span></div>
-        <div className="projects-grid">
-          {projects.map((item, index) => <Link className={`project-card ${item.className}`} key={item.title} href={`/projects/${item.slug}`} aria-label={`Explore ${item.title} concept project`}>
-            <div className="project-visual">
-              {index === 0 ? <div className="orbit-preview"><div className="preview-sidebar"><div className="orbit-brand"><Asterisk size={17} /> orbit</div><span className="active-mini">Overview</span><span>My tasks</span><span>Projects</span><span>Notes</span><div className="sidebar-bottom">Your space.<br />Your pace.</div></div><div className="preview-dashboard"><div className="preview-greeting">Good morning, {portfolio.name} <span>☀</span></div><p>Make room for your best work.</p><div className="preview-stat-row"><div>Today’s focus<strong>03</strong><span>A little progress, every day</span></div><div className="mini-chart"><span style={{height:"35%"}} /><span style={{height:"58%"}} /><span style={{height:"46%"}} /><span style={{height:"73%"}} /><span style={{height:"65%"}} /><span style={{height:"93%"}} /></div></div><div className="mini-task"><span className="task-check">✓</span> Refine the little details <span>Design</span></div><div className="mini-task"><span className="task-circle" /> Bring the idea to life <span>Build</span></div></div></div> : <div className="forma-preview"><div className="forma-nav"><span>forma®</span><span>Objects & ideas</span><span>2026</span></div><div className="forma-type">Less,<br /><span>but better.</span></div><div className="forma-bottom"><span>A collection of thoughtful things.</span><div className="forma-colors"><i /><i /><i /></div></div></div>}
-              <span className="project-open"><ExternalLink size={18} /></span>
-            </div>
-            <div className="project-caption"><div><h3>{item.title}</h3><p>{item.category}</p></div><span>{item.type}</span></div>
-          </Link>)}
-        </div>
-      </section>
+function ProjectVisual({ kind }: { kind: string }) {
+  return <DepthScene className={`project-stage ${kind}-stage`}>
+    {kind === "panam" && <>
+      <div className="product-floor depth-surface" />
+      <div className="panam-phone depth-surface"><div className="device-camera" /><div className="product-brand"><Wallet size={17} /> panam</div><span className="screen-label">A clearer picture.</span><strong className="phone-title">Your money,<br />at a glance.</strong><div className="expense-chart"><i /><i /><i /><i /><i /></div><div className="import-notice"><Check size={12} /> Statement imported</div><div className="phone-expenses"><span>Everyday spending</span><span><i /> Food & coffee</span><span><i /> Travel & transport</span></div></div>
+      <Character pose="laptop" className="project-character" sizes="(max-width: 600px) 42vw, 210px" />
+      <div className="product-chip depth-surface"><Sparkles size={13} /> A little help from AI</div>
+    </>}
+    {kind === "rekha" && <>
+      <div className="document-back depth-surface" />
+      <div className="document-front depth-surface"><div className="document-header"><FileText size={17} /><span>rekha</span><span>PDF</span></div><strong>Less busywork.<br />More understanding.</strong><div className="document-lines"><i /><i /><i /><i /></div><div className="document-highlight">A good idea, in any language.</div><div className="document-lines short"><i /><i /></div></div>
+      <div className="ocr-chip depth-surface"><ScanText size={19} /><span>Read. Translate.<br /><strong>Understand.</strong></span></div>
+      <div className="summary-chip depth-surface"><Sparkles size={14} /> The useful bits, summarized.</div>
+    </>}
+    {kind === "streamsync" && <>
+      <div className="watch-window depth-surface"><div className="window-toolbar"><span className="window-dots"><i /><i /><i /></span><span>StreamSync</span><span className="sync-status">In sync</span></div><div className="watch-screen"><span className="movie-orbit" /><span className="movie-orbit second" /><strong>A movie.<br />The same moment.</strong><span className="watch-play"><Play size={17} fill="currentColor" /></span></div><div className="watch-progress"><i /><span>Watching together</span><span>● ● ●</span></div></div>
+      <div className="watch-chat depth-surface"><span>Room chat</span><p>Ready when you are.</p><div><Check size={12} /> Let’s press play.</div></div>
+    </>}
+    {kind === "cairn" && <>
+      <div className="cairn-back depth-surface"><Layers size={16} /> A little clarity.</div>
+      <div className="cairn-board depth-surface"><div className="document-header"><Layers size={17} /><span>cairn</span><Sparkles size={14} /></div><strong>Good work<br />starts with a plan.</strong><div className="plan-task"><span className="task-check"><Check size={10} /></span> Find the starting point</div><div className="plan-task"><span className="task-circle" /> Build something useful</div><div className="plan-task"><span className="task-circle" /> Make time to reflect</div><div className="plan-footer">Plan. Build. Review.</div></div>
+      <div className="review-chip depth-surface"><Sparkles size={15} /><span>Your week,<br /><strong>in perspective.</strong></span></div>
+    </>}
+  </DepthScene>;
+}
 
-); }
+export function ProjectGrid() {
+  return <section className="work-section section-space" id="work" aria-labelledby="work-title">
+    <div className="section-heading work-heading"><div><p className="section-label">Selected work</p><h2 id="work-title">Useful ideas,<br />brought to life.</h2></div><div className="work-introduction"><p>From making sense of expenses to bringing people together. A few things I’ve built.</p><Character pose="point" className="heading-character" sizes="130px" /></div></div>
+    <div className="projects-grid">{projects.filter(project => project.featured).map(project => <Link className={`project-card ${project.className}`} key={project.slug} href={`/projects/${project.slug}`}>
+      <ProjectVisual kind={project.className} />
+      <div className="project-caption"><div><span className="project-category">{project.category}</span><h3>{project.title} <span>{project.type}</span></h3><p>{project.description}</p><div className="project-tech">{project.technologies.slice(0, 3).join(" / ")}</div></div><span className="project-open"><ArrowUpRight size={20} /></span></div>
+    </Link>)}</div>
+    <div className="other-work"><h3>And a few more rabbit holes.</h3><div>{projects.filter(project => !project.featured).map(project => <Link key={project.slug} href={`/projects/${project.slug}`}><span>{project.title}<small>{project.type}</small></span><ArrowUpRight size={18} /></Link>)}</div></div>
+  </section>;
+}
