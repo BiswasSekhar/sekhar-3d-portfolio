@@ -8,6 +8,9 @@ export function usePageVisible() { return useSyncExternalStore(subscribeVisibili
 const compactQuery = "(max-width: 800px)";
 const subscribeCompact = (callback:()=>void) => { const m=window.matchMedia(compactQuery);m.addEventListener("change",callback);return()=>m.removeEventListener("change",callback); };
 export function useCompactViewport() { return useSyncExternalStore(subscribeCompact,()=>window.matchMedia(compactQuery).matches,()=>true); }
+const coarsePointerQuery = "(pointer: coarse)";
+const subscribeCoarsePointer = (callback:()=>void) => { const m=window.matchMedia(coarsePointerQuery);m.addEventListener("change",callback);return()=>m.removeEventListener("change",callback); };
+export function useCoarsePointer() { return useSyncExternalStore(subscribeCoarsePointer,()=>window.matchMedia(coarsePointerQuery).matches,()=>false); }
 export function usePointerParallax(ref:RefObject<HTMLDivElement|null>,enabled:boolean,reset:number) {
  useEffect(()=>{
   const node=ref.current;if(!node||!enabled||!window.matchMedia("(hover: hover) and (pointer: fine)").matches)return;
